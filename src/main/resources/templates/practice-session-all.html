@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Мой дневник</title>
+  </head>
+<body>
+<header>
+
+  <nav>
+    <a href="/">Главная</a>
+    <a sec:authorize="!hasRole('ADMIN')" href="/diary">Мой дневник</a>
+    <a sec:authorize="!hasRole('ADMIN')" href="/statistics">Моя статистика</a>
+    <a href="/songs">Песни</a>
+    <a href="/articles">Статьи от админа</a>
+    <a href="/profile">Профиль</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Мои записи</h1>
+  <div th:if="${errorMessage}" class="alert alert-danger">
+    <strong>Ошибка:</strong> <span th:text="${errorMessage}"></span>
+  </div>
+  <div th:if="${successMessage}" class="alert alert-success">
+    <strong>Сообщение:</strong> <span th:text="${successMessage}"></span>
+  </div>
+
+  <div th:if="${sessions.empty}">
+    <p>У вас пока нет записей.</p>
+  </div>
+  <a sec:authorize="!hasRole('ADMIN')" href="/diary/add" role="button">Добавить новую запись</a>
+
+  <div th:unless="${sessions.empty}">
+    <div th:each="practiceSession : ${sessions}" class="session-card">
+      <h3 th:text="${practiceSession.date}"></h3>
+      <p th:text="'Время: ' + ${practiceSession.durationMinutes} + ' мин'"></p>
+      <p th:if="${practiceSession.songTitle}" th:text="'Песня: ' + ${practiceSession.songTitle} + ' - ' + ${practiceSession.songArtist}"></p>
+      <p th:if="${practiceSession.exercise}" th:text="'Упражнение: ' + ${practiceSession.exercise}"></p>
+      <p th:if="${practiceSession.notes}" th:text="'Заметки: ' + ${practiceSession.notes}"></p>
+      <a th:href="@{/diary/session-details/{id}(id=${practiceSession.id})}" role="button">Подробнее</a>
+
+    </div>
+  </div>
+
+</main>
+
+
+
+<footer>
+  <p>&copy; 2025 Music Diary</p>
+</footer>
+</body>
+</html>

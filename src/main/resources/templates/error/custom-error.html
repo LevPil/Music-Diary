@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Ошибка</title>
+</head>
+<body>
+<main>
+  <article class="text-center">
+    <hgroup>
+      <h1 th:text="${errorCode} + ' - ' + ${errorTitle}">Ошибка</h1>
+      <p th:text="${errorMessage}">Произошла ошибка</p>
+    </hgroup>
+    <div>
+      <a href="/" role="button">Вернуться на главную</a>
+      <a href="javascript:history.back()" role="button" class="secondary">Назад</a>
+    </div>
+  </article>
+</main>
+</body>
+</html>

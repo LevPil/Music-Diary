@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Моя статистика</title>
+  <style>
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .stat-card {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .stat-card h2 {
+        margin-top: 0;
+        font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/diary">Мой дневник</a>
+    <a href="/statistics">Моя статистика</a>
+    <a href="/songs">Песни</a>
+    <a href="/articles">Статьи от админа</a>
+    <a href="/profile">Профиль</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Моя статистика тренировок</h1>
+
+  <div class="stats-container">
+    <section class="stat-card">
+      <h2>Всего минут за 7 дней</h2>
+      <p th:text="${stats.totalMinutesLast7Days ?: 0}">0</p>
+    </section>
+
+    <section class="stat-card">
+      <h2>Активных дней</h2>
+      <p th:text="${stats.activeDaysLast7Days ?: 0}">0</p>
+    </section>
+
+    <section class="stat-card">
+      <h2>Средняя длительность</h2>
+      <p th:text="${#numbers.formatDecimal(stats.averageDuration, 0, 2) ?: '0.00'}">0.00</p>
+    </section>
+
+    <section class="stat-card">
+      <h2>Сравнение недель</h2>
+      <p>Предыдущая: <span th:text="${stats.lastWeekMinutes ?: 0}">0</span> мин</p>
+      <p>Текущая: <span th:text="${stats.currentWeekMinutes ?: 0}">0</span> мин</p>
+      <p>Активность: <span th:text="${stats.weeklyTrend}">--</span></p>
+    </section>
+
+    <section class="stat-card">
+      <h2>Топ-3 песни</h2>
+      <ul>
+        <li th:each="song : ${stats.topSongs}" th:text="${song.name + ': ' + song.count + ' раз'}">
+          Песня: 0 раз
+        </li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 Guitar diary</p>
+</footer>
+</body>
+</html>

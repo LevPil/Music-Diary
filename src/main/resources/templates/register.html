@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Регистрация</title>
+</head>
+<body>
+<main>
+  <h1>Регистрация</h1>
+  <form th:action="@{/register}" th:object="${userRegistrationDto}" method="post">
+    <div>
+      <label for="username">Логин:</label>
+      <input type="text" id="username" th:field="*{username}" required>
+      <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></small>
+    </div>
+
+    <div>
+      <label for="fullName">Полное имя:</label>
+      <input type="text" id="fullName" th:field="*{fullName}" required>
+      <small th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-danger"></small>
+    </div>
+
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" th:field="*{email}" required>
+      <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></small>
+    </div>
+
+    <div>
+      <label for="age">Возраст:</label>
+      <input type="number" id="age" th:field="*{age}" min="1" required>
+      <small th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="text-danger"></small>
+    </div>
+
+    <div>
+      <label for="password">Пароль:</label>
+      <input type="password" id="password" th:field="*{password}" required>
+      <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></small>
+    </div>
+
+    <div>
+      <label for="confirmPassword">Подтвердите пароль:</label>
+      <input type="password" id="confirmPassword" th:field="*{confirmPassword}" required>
+      <small th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger"></small>
+    </div>
+
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+
+  <a href="/login">Уже есть аккаунт? Войти</a>
+</main>
+</body>
+</html>

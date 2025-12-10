@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Добавить статью</title>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/articles">Статьи</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Добавить новую статью</h1>
+
+  <form th:action="@{/articles/add}" th:object="${articleModel}" method="post">
+    <label for="title">
+      Заголовок
+      <input type="text" id="title" th:field="*{title}" required>
+      <small th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></small>
+    </label>
+
+    <label for="content">
+      Содержимое
+      <textarea id="content" th:field="*{content}" required></textarea>
+      <small th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-danger"></small>
+    </label>
+
+    <button type="submit">Добавить статью</button>
+  </form>
+</main>
+
+<footer>
+  <p>&copy; 2025 Music Diary</p>
+</footer>
+</body>
+</html>

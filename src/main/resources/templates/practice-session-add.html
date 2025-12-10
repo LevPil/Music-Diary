@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Добавить запись</title>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/diary">Мой дневник</a>
+    <a href="/songs">Песни</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Добавить новую запись</h1>
+
+  <form th:action="@{/diary/add}" th:method="post" th:object="${sessionModel}">
+    <label for="date">
+      Дата
+      <input id="date" th:field="*{date}" type="date" required>
+      <small th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="text-danger"></small>
+    </label>
+
+    <label for="durationMinutes">
+      Продолжительность (мин)
+      <input id="durationMinutes" th:field="*{durationMinutes}" type="number" min="1" required>
+      <small th:if="${#fields.hasErrors('durationMinutes')}" th:errors="*{durationMinutes}" class="text-danger"></small>
+    </label>
+
+    <label for="repetitions">
+      Повторений
+      <input id="repetitions" th:field="*{repetitions}" type="number" min="0" value="1">
+    </label>
+
+    <label for="songId">
+      Песня (или оставьте пустой, если упражнение)
+      <select id="songId" th:field="*{songId}">
+        <option value="">-- Выберите песню --</option>
+        <option th:each="song : ${availableSongs}"
+                th:value="${song.id}"
+                th:text="${song.title} + ' - ' + ${song.artist}">
+        </option>
+      </select>
+    </label>
+
+    <label for="exercise">
+      Упражнение (если не песня)
+      <input id="exercise" th:field="*{exercise}" type="text" placeholder="Введите название упражнения">
+    </label>
+
+    <label for="notes">
+      Заметки
+      <textarea id="notes" th:field="*{notes}" placeholder="Введите заметки о тренировке"></textarea>
+    </label>
+
+    <button type="submit">Добавить запись</button>
+  </form>
+</main>
+<div th:if="${errorMessage}" class="alert alert-danger">
+  <span th:text="${errorMessage}"></span>
+</div>
+<footer>
+  <p>&copy; 2025 Music Diary</p>
+</footer>
+</body>
+</html>

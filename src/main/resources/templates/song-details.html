@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Детали песни</title>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/songs">Песни</a>
+  </nav>
+</header>
+
+<main>
+  <article class="card">
+    <h2 th:text="${songDetails.title} + ' - ' + ${songDetails.artist}"></h2>
+    <p><strong>Добавил:</strong> <span th:text="${songDetails.authorUsername}"></span></p>
+    <p th:if="${songDetails.description}" th:text="${songDetails.description}"></p>
+    <div th:if="${songDetails.tabs}">
+      <h3>Табулатура</h3>
+      <pre th:text="${songDetails.tabs}"></pre>
+    </div>
+
+    <div>
+      <a href="/songs" role="button">Назад к списку</a>
+
+
+    </div>
+  </article>
+</main>
+
+<footer>
+  <p>&copy; 2025 Music Diary</p>
+</footer>
+</body>
+</html>

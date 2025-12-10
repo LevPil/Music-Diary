@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Детали тренировки</title>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/diary">Дневник пользователя</a>
+  </nav>
+</header>
+
+<main>
+  <article class="session-details">
+    <h2 th:text="${sessionDetails.date}"></h2>
+    <p><strong>Время:</strong> <span th:text="${sessionDetails.durationMinutes} + ' мин'"></span></p>
+    <p th:if="${sessionDetails.songTitle}" th:text="'Песня: ' + ${sessionDetails.songTitle} + ' - ' + ${sessionDetails.songArtist}"></p>
+    <p th:if="${sessionDetails.exercise}" th:text="'Упражнение: ' + ${sessionDetails.exercise}"></p>
+    <p th:if="${sessionDetails.notes}" th:text="'Заметки: ' + ${sessionDetails.notes}"></p>
+  </article>
+
+  <a href="/diary" role="button">Назад к списку</a>
+  <form th:action="@{/diary/session-delete/{id}(id=${sessionDetails.id})}"
+        th:method="get"
+        onsubmit="return confirm('Вы уверены, что хотите удалить запись?');">
+    <button type="submit" class="secondary">Удалить запись сессии</button>
+  </form>
+</main>
+
+<div th:if="${errorMessage}" class="alert alert-danger">
+  <strong>Ошибка:</strong> <span th:text="${errorMessage}"></span>
+</div>
+<div th:if="${successMessage}" class="alert alert-success">
+  <strong>Сообщение:</strong> <span th:text="${successMessage}"></span>
+</div>
+<footer>
+  <p>&copy; 2025 Music Diary</p>
+</footer>
+</body>
+</html>

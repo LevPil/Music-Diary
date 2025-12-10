@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Добавить песню</title>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/">Главная</a>
+    <a href="/songs">Песни</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Добавить новую песню</h1>
+
+  <form th:action="@{/songs/add}"
+        th:method="post"
+        th:object="${songModel}">
+    <label for="title">
+      Название песни
+      <input id="title"
+             th:field="*{title}"
+             type="text"
+             placeholder="Введите название"
+             th:errorclass="invalid">
+      <small th:if="${#fields.hasErrors('title')}"
+             th:errors="*{title}"
+             class="text-danger"></small>
+    </label>
+
+    <label for="artist">
+      Исполнитель
+      <input id="artist"
+             th:field="*{artist}"
+             type="text"
+             placeholder="Введите исполнителя">
+      <small th:if="${#fields.hasErrors('artist')}"
+             th:errors="*{artist}"
+             class="text-danger"></small>
+    </label>
+
+    <label for="description">
+      Описание
+      <textarea id="description"
+                th:field="*{description}"
+                placeholder="Введите описание"></textarea>
+    </label>
+
+    <label for="tabs">
+      Табулатура
+      <textarea id="tabs"
+                th:field="*{tabs}"
+                placeholder="Введите табулатуру"></textarea>
+    </label>
+
+    <button type="submit">Добавить песню</button>
+  </form>
+</main>
+
+<footer>
+  <p>&copy; 2025 Music Diary</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Добро пожаловать в дневник музыкальных сессий!</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .main-content {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .sidebar {
+            width: 300px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .article-preview {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .article-preview h3 {
+            margin-top: 0;
+        }
+        .article-preview p {
+            font-size: 0.9em;
+            color: #555;
+        }
+        .song-of-day {
+    position: absolute;
+    top: 330px;
+    left: 7px;
+    width: 280px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 16px;
+    font-size: 0.95rem;
+    z-index: 10;
+  }
+  .song-of-day h3 {
+    margin: 0 0 12px 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    border-bottom: 2px solid #ff6b6b;
+    padding-bottom: 6px;
+  }
+  .song-of-day h4 {
+    margin: 8px 0 4px 0;
+    color: #1a1a1a;
+    font-size: 1.05rem;
+  }
+  .song-of-day p {
+    margin: 4px 0;
+    color: #555;
+  }
+  .song-of-day strong {
+    color: #333;
+  }
+
+  .article-preview {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a sec:authorize="!hasRole('ADMIN')" href="/">Главная</a>
+        <a sec:authorize="!hasRole('ADMIN')" href="/diary">Мой дневник</a>
+        <a sec:authorize="!hasRole('ADMIN')" href="/statistics">Моя статистика</a>
+        <a href="/songs">Песни</a>
+        <a href="/articles">Статьи от админа</a>
+        <a href="/profile">Профиль</a>
+        <div th:if="${#authentication.principal != 'anonymousUser'}" class="user-info">
+            <span th:text="${#authentication.name}"></span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="secondary">Выйти</button>
+            </form>
+        </div>
+        <a th:unless="${#authentication.principal != 'anonymousUser'}" href="/login" class="login-btn">Войти</a>
+        <a th:unless="${#authentication.principal != 'anonymousUser'}" href="/register">Регистрация</a>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="main-content">
+        <h1>Добро пожаловать в дневник музыкальных сессий!</h1>
+        <p>Добавляйте свои записи тренировок на инструментах и соревнуйтесь с другими!</p>
+    </div>
+    <div class="song-of-day">
+        <h2>Пользователи уже выучили</h2>
+        <div th:if="${randomSong}">
+            <h3 th:text="${randomSong.title}">Название</h3>
+            <p><strong>Исполнитель:</strong> <span th:text="${randomSong.artist}">Исполнитель</span></p>
+            <p><strong>Добавил:</strong> <span th:text="${randomSong.authorUsername}">Автор</span></p>
+        </div>
+        <p th:unless="${randomSong}">Пока нет песен в базе</p>
+    </div>
+
+    <div class="sidebar">
+        <h2>Последние статьи</h2>
+        <div th:if="${#lists.size(latestArticles) > 0}">
+            <div th:each="article : ${latestArticles}" class="article-preview">
+                <h3 th:text="${article.title}"></h3>
+                <p th:text="${#strings.abbreviate(article.content, 150)}"></p>
+                <p><small>Автор: <span th:text="${article.authorUsername}"></span></small></p>
+            </div>
+            <a href="/articles" role="button">Все статьи</a>
+        </div>
+        <div th:if="${#lists.size(latestArticles) == 0}">
+            <p>Пока нет статей.</p>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Guitar diary</p>
+</footer>
+</body>
+</html>

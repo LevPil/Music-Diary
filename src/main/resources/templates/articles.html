@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Статьи</title>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/">Главная</a>
+    <a sec:authorize="!hasRole('ADMIN')" href="/diary">Мой дневник</a>
+    <a sec:authorize="!hasRole('ADMIN')" href="/statistics">Моя статистика</a>
+    <a href="/songs">Песни</a>
+    <a href="/articles">Статьи от админа</a>
+    <a href="/profile">Профиль</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Статьи</h1>
+  <div sec:authorize="hasRole('ADMIN')">
+    <a href="/articles/add" role="button">Добавить статью</a>
+  </div>
+
+  <div th:each="a : ${allArticles}" class="article-card">
+    <h3 th:text="${a.title}"></h3>
+    <p><strong>Автор:</strong> <span th:text="${a.authorUsername}"></span></p>
+    <p th:text="${#strings.abbreviate(a.content, 200)}"></p>
+    <a th:href="@{/articles/article-details/{id}(id=${a.id})}" role="button">Подробнее</a>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 Music Diary</p>
+</footer>
+</body>
+</html>

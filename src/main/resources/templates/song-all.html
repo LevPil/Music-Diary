@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Список песен</title>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="/">Главная</a>
+    <a sec:authorize="!hasRole('ADMIN')" href="/diary">Мой дневник</a>
+    <a href="/songs">Песни</a>
+    <a href="/articles">Статьи от админа</a>
+    <a href="/profile">Профиль</a>
+
+  </nav>
+</header>
+
+<main>
+  <h1>Все песни</h1>
+  <a href="/songs/add">Добавить песню</a>
+
+  <form method="get" action="/songs" class="grid" style="gap: 0.5rem; margin-bottom: 1rem; display: flex;">
+    <input type="search"
+           name="search"
+           placeholder="Поиск по названию или исполнителю..."
+           th:value="${search}"
+           style="flex:1; padding:0.5rem;">
+
+    <select name="author" style="padding:0.5rem;">
+      <option value="">— Все авторы —</option>
+      <option th:each="auth : ${allAuthors}"
+              th:value="${auth}"
+              th:text="${auth}"
+              th:selected="${auth == selectedAuthor}">Автор</option>
+    </select>
+
+    <button type="submit">Применить</button>
+  </form>
+
+  <div th:if="${errorMessage}" class="alert alert-danger">
+    <strong>Ошибка:</strong> <span th:text="${errorMessage}"></span>
+  </div>
+  <div th:if="${successMessage}" class="alert alert-success">
+    <strong>Сообщение:</strong> <span th:text="${successMessage}"></span>
+  </div>
+
+  <div class="grid">
+    <div th:each="s : ${allSongs}" class="card">
+      <h3 th:text="${s.title} + ' - ' + ${s.artist}"></h3>
+      <p><strong>Добавил:</strong> <span th:text="${s.authorUsername}"></span></p>
+      <p th:if="${s.description}" th:text="${s.description}"></p>
+
+      <a th:href="@{/songs/song-details/{id}(id=${s.id})}" role="button">Подробнее</a>
+
+      <form th:if="${s.authorUsername == #authentication.name}"
+            th:action="@{/songs/song-delete/{id}(id=${s.id})}"
+            th:method="get"
+            onsubmit="return confirm('Вы уверены, что хотите удалить эту песню?');">
+        <button type="submit" class="secondary">Удалить песню</button>
+      </form>
+    </div>
+  </div>
+
+  <nav th:if="${totalPages != null && totalPages > 1}">
+    <ul>
+      <li th:if="${currentPage > 0}">
+        <a th:href="@{/songs(page=${currentPage - 1}, size=10)}">« Назад</a>
+      </li>
+      <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/songs(page=${i}, size=10)}"
+           th:text="${i + 1}"
+           th:classappend="${i == currentPage} ? 'active' : ''"></a>
+      </li>
+      <li th:if="${currentPage < totalPages - 1}">
+        <a th:href="@{/songs(page=${currentPage + 1}, size=10)}">Вперёд »</a>
+      </li>
+    </ul>
+  </nav>
+</main>
+
+<footer>
+  <p>&copy; 2025 Guitar Diary</p>
+</footer>
+</body>
+</html>
